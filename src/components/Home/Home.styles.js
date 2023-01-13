@@ -9,9 +9,7 @@ export const Wrapper = styled.div`
     img {
         width: 80%;
         max-width: 800px;
-        margin-top: 20vh;
+        margin: 5vh 0;
     }
-`
+`;
 
-export const Content = styled.div`
-`
