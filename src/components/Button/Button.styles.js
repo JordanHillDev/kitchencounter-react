@@ -16,4 +16,21 @@ export const Wrapper = styled.button`
         color: var(--primary-color);
         background-color: var(--accent-color);
     }
+
+    &.secondary {
+        color: var(--primary-color);
+        background-color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+    }
+
+    &.secondary:hover {
+        color: var(--accent-color);
+        background-color: var(--primary-color);
+    }
+
+    &.close {
+        padding: 0.5rem .75rem;
+        margin-left: auto;
+        border: none;
+    }
 `;
