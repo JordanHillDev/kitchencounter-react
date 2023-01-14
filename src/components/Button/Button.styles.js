@@ -11,6 +11,7 @@ export const Wrapper = styled.button`
     transition: 0.3s;
     font-weight: bold;
     font-family: var(--font-regular);
+    font-size: 16px;
 
     :hover {
         color: var(--primary-color);
@@ -32,5 +33,18 @@ export const Wrapper = styled.button`
         padding: 0.5rem .75rem;
         margin-left: auto;
         border: none;
+    }
+
+    &.submit {
+        color: var(--primary-color);
+        background-color: var(--accent-color);
+        width: 300px;
+        border-radius: .3rem;
+        border-color: var(--primary-color);
+    }
+
+    &.submit:hover {
+        color: var(--accent-color);
+        background-color: var(--primary-color);
     }
 `;
