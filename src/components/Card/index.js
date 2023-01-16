@@ -14,7 +14,6 @@ const Card = ({ cardDisplayed, setCardDisplayed }) => {
         e.preventDefault();
 
         const email = emailRef.current?.value;
-        console.log(email);
         const password = passwordRef.current?.value;
 
         const { user, error } =
@@ -31,24 +30,6 @@ const Card = ({ cardDisplayed, setCardDisplayed }) => {
             });
         }
     };
-
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
-
-    //     const email = emailRef.current?.value;
-    //     const password = passwordRef.current?.value;
-
-    //     const { user, error } = await supabase.auth.signIn({ email, password });
-
-    //     if (error) {
-    //         setHelperText({ error: true, text: error.message });
-    //     } else if (!user && !error) {
-    //         setHelperText({
-    //             error: false,
-    //             text: "An email has been sent to you for verification!",
-    //         });
-    //     }
-    // };
 
     return (
         <Wrapper>
