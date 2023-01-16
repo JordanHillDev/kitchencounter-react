@@ -6,8 +6,8 @@ import Test from "./Test";
 const BaseRouter = () => (
     <Layout>
         <Routes>
-            <Route path='main' element = {<Main />} />
-            <Route path='main/test' element = {<Test />} />
+            <Route path='/main' element = {<Main />} />
+            {/* <Route path='main/test' element = {<Test />} /> */}
         </Routes>
     </Layout>
 )
