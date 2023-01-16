@@ -1,42 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
-// Contexts
-import { AuthProvider } from "./contexts/Auth";
-// Routing
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Components
 import Login from "./components/Login";
 import BaseRouter from "./components/BaseRouter";
-
-// Context
-// import { supabase } from "./supabaseClient";
 // Styles
 import { GlobalStyle } from "./GlobalStyle";
 
 const App = () => {
-    const [session, setSession] = useState(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        supabase.auth.session().then(({ data: { session } }) => {
-            setSession(session);
-        });
+        const session = supabase.auth.session();
+        setUser(session?.user ?? null);
+        console.log(user)
+        const { data: authListener } = supabase.auth.onAuthStateChange(
+            async (event, session) => {
+                const currentUser = session?.user;
+                setUser(currentUser ?? null);
+            }
+        );
 
-        supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-    }, []);
+        return () => {
+            authListener?.unsubscribe();
+        };
+    }, [user]);
 
     return (
-        <Router>
-            {/* {!session ? <Login /> : <BaseRouter key={session.user.id} session={session} />} */}
-            <AuthProvider>
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route exact path="/" element={<BaseRouter />} />
-                </Routes>
-            </AuthProvider>
+        <>
+            {!user ? <Login /> : <BaseRouter user={user} />}
             <GlobalStyle />
-        </Router>
+        </>
     );
 };
 

@@ -1,53 +1,54 @@
-import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/Auth";
+import React, { useState, useRef } from "react";
+import { supabase } from "../../supabaseClient";
 // Components
 import Button from "../Button";
 // Styles
 import { Wrapper, TextInput } from "./Card.styles";
 
 const Card = ({ cardDisplayed, setCardDisplayed }) => {
+    const [helperText, setHelperText] = useState({ error: null, text: null });
     const emailRef = useRef();
     const passwordRef = useRef();
-    const { signUp } = useAuth();
-    const { signIn } = useAuth();
-    const navigate = useNavigate();
 
-    const handleSignUp = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Get email and password input values
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
+        const email = emailRef.current?.value;
+        console.log(email);
+        const password = passwordRef.current?.value;
 
-        // Calls `signUp` function from the context
-        const { error } = await signUp({ email, password });
+        const { user, error } =
+            cardDisplayed === "login"
+                ? await supabase.auth.signIn({ email, password })
+                : await supabase.auth.signUp({ email, password });
 
         if (error) {
-            alert("error signing in");
-        } else {
-            // Redirect user to Dashboard
-            navigate("/");
+            setHelperText({ error: true, text: error.message });
+        } else if (!user && !error) {
+            setHelperText({
+                error: false,
+                text: "An email has been sent to you for verification!",
+            });
         }
     };
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
 
-        // Get email and password input values
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
+    //     const email = emailRef.current?.value;
+    //     const password = passwordRef.current?.value;
 
-        // Calls `signIn` function from the context
-        const { error } = await signIn({ email, password });
+    //     const { user, error } = await supabase.auth.signIn({ email, password });
 
-        if (error) {
-            alert("error signing in");
-        } else {
-            // Redirect user to Dashboard
-            navigate("/");
-        }
-    };
+    //     if (error) {
+    //         setHelperText({ error: true, text: error.message });
+    //     } else if (!user && !error) {
+    //         setHelperText({
+    //             error: false,
+    //             text: "An email has been sent to you for verification!",
+    //         });
+    //     }
+    // };
 
     return (
         <Wrapper>
@@ -59,13 +60,14 @@ const Card = ({ cardDisplayed, setCardDisplayed }) => {
                     callback={() => setCardDisplayed(null)}
                 />
             </div>
-            <form
-                onSubmit={
-                    cardDisplayed === "login" ? handleLogin : handleSignUp
-                }
-            >
-                <TextInput id="email" type="email" ref={emailRef} />
-                <TextInput id="password" type="password" ref={passwordRef} />
+            <form onSubmit={handleSubmit}>
+                <TextInput id="email" type="email" ref={emailRef} required />
+                <TextInput
+                    id="password"
+                    type="password"
+                    ref={passwordRef}
+                    required
+                />
                 <Button text={"Submit"} className={"submit"} />
             </form>
         </Wrapper>
